@@ -22,10 +22,10 @@ bool isStorageCreate = false;
 void createStorage();
 void ShowStorage(int mode = 0);
 void AddStorageItem();
+void RemoveStorageItem();
+void ChangePrice();
 template<typename ArrType>
 void FillArray(ArrType* dynamicArray, ArrType* staticArray, size_t arraySize);
-
-
 //-------------------------------------------------------
 
 
@@ -236,15 +236,15 @@ void ShowSuperAdminMenu()
 		}
 		else if (choose == "3")
 		{
-
+			AddStorageItem();
 		}
 		else if (choose == "4")
 		{
-
+			RemoveStorageItem();
 		}
 		else if (choose == "5")
 		{
-
+			ChangePrice();
 		}
 		else if (choose == "6")
 		{
@@ -311,9 +311,163 @@ void AddStorageItem()
 		std::cout << "Введите кол-во товара для пополнения ";
 		Getline(chooseCount);
 		
-		
+		if (IsNumber(chooseID) && IsNumber(chooseCount))
+		{
+			id = std::stoi(chooseID) - 1;
+			count = std::stoi(chooseCount);
+
+			if (id<0 || id>storageSize - 1 || count < 0 || count>300)
+			{
+				std::cout << "Некорректный id или кол-во \n Максимальное кол-во товаров 300 \n";
+				Sleep(1500);
+			}
+			else
+			{
+				std::cout << std::left << std::setw(25) << nameArr[id] << "\t" 
+					<< counterArr[id] << "---->" << counterArr[id] + count << "\n\n";
+				std::cout << "Подтвердить? \n1-да \n2 нет\n Ввод - ";
+				Getline(choose);
+				if (choose=="1")
+				{
+					counterArr[id] += count;
+					std::cout << "Товар успешно пополнен";
+					Sleep(1500);
+					system("cls");
+					break;
+				}
+				else if (choose == "2")
+				{
+					std::cout << "Отмена пополнения товара\n";
+					Sleep(1500);
+				}
+				else
+				{
+					Err();
+				}
+			}
+		}
 	}
 
+}
+
+void RemoveStorageItem()
+{
+	std::string chooseID, chooseCount, choose;
+	unsigned int id = 0, count = 0;
+
+	while (true)
+	{
+		system("cls");
+		ShowStorage(1);
+		std::cout << "Введите id товара или \"exit\" для выхода ";
+		Getline(chooseID);
+
+		if (chooseID == "exit")
+		{
+			std::cout << "Отмена операции для списания!\n";
+			Sleep(1500);
+			break;
+		}
+		std::cout << "Введите кол-во товара для списания ";
+		Getline(chooseCount);
+
+		if (IsNumber(chooseID) && IsNumber(chooseCount))
+		{
+			id = std::stoi(chooseID) - 1;
+			count = std::stoi(chooseCount);
+
+			if (id<0 || id>storageSize - 1 || count < 0 || count>counterArr[id])
+			{
+				std::cout << "Некорректный id или кол-во \n Максимально кол-во для списания товаров - \n"
+					<< counterArr[id]<<"\n\n";
+				Sleep(1500);
+			}
+			else
+			{
+				std::cout << std::left << std::setw(25) << nameArr[id] << "\t"
+					<< counterArr[id] << "---->" << counterArr[id] - count << "\n\n";
+				std::cout << "Подтвердить? \n1-да \n2 нет\n Ввод - ";
+				Getline(choose);
+				if (choose == "1")
+				{
+					counterArr[id] -= count;
+					std::cout << "Товар успешно списан";
+					Sleep(1500);
+					system("cls");
+					break;
+				}
+				else if (choose == "2")
+				{
+					std::cout << "Отмена списания товара\n";
+					Sleep(1500);
+				}
+				else
+				{
+					Err();
+				}
+			}
+		}
+	}
+}
+
+void ChangePrice()
+{
+	std::string chooseID, choosePrice, choose;
+	unsigned int id = 0;
+	double newPrice = 0.0;
+
+	while (true)
+	{
+		system("cls");
+		ShowStorage(2);
+		std::cout << "Введите id товара или \"exit\" для выхода ";
+		Getline(chooseID);
+
+		if (chooseID == "exit")
+		{
+			std::cout << "Отмена операции для изменения цены!\n";
+			Sleep(1500);
+			break;
+		}
+		std::cout << "Введите новую цену товара ";
+		Getline(choosePrice);
+
+		if (IsNumber(chooseID) && IsNumber(choosePrice))
+		{
+			id = std::stoi(chooseID) - 1;
+			newPrice = std::stod(choosePrice);
+
+			if (id < 0 || id > storageSize - 1 || newPrice < 0.0 || newPrice > 200000.99)
+			{
+				std::cout << "Некорректный id или кол-во \n Максимально цена товар - 200000.99 \n\n";
+				Sleep(1500);
+			}
+			else
+			{
+				std::cout << std::left << std::setw(25) << nameArr[id] << "\t"
+					<< priceArr[id] << "---->" << newPrice << "\n\n";
+				std::cout << "Подтвердить? \n1-да \n2 нет\n Ввод - ";
+				Getline(choose);
+				if (choose == "1")
+				{
+					priceArr[id] = newPrice;
+					std::cout << "Цена успешно изменена";
+					Sleep(1500);
+					system("cls");
+					break;
+				}
+				else if (choose == "2")
+				{
+					std::cout << "Отмена изменения цены\n";
+					Sleep(1500);
+				}
+				else
+				{
+					Err();
+				}
+			}
+		}
+	}
 }
 
 inline void Getline(std::string& str)
