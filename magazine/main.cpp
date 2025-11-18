@@ -24,6 +24,11 @@ void ShowStorage(int mode = 0);
 void AddStorageItem();
 void RemoveStorageItem();
 void ChangePrice();
+
+void ChangeStorage();
+void AddNewItem();
+void ChangeName();
+
 template<typename ArrType>
 void FillArray(ArrType* dynamicArray, ArrType* staticArray, size_t arraySize);
 //-------------------------------------------------------
@@ -125,8 +130,15 @@ void ShowStorage(int mode)
 				"\t" << priceArr[i] << "\n";
 		}
 	}
+	else if (mode == 3)
+	{
+		std::cout << "ID\t" << std::left << std::setw(25) << "Название товара \t"<<"\n";
 
-
+		for (size_t i = 0; i < storageSize; i++)
+		{
+			std::cout << idArr[i] << "\t" << std::left << std::setw(25) << nameArr[i] << "\t\n";
+		}
+	}
 }
 
 void Start()
@@ -248,7 +260,7 @@ void ShowSuperAdminMenu()
 		}
 		else if (choose == "6")
 		{
-
+			ChangeStorage();
 		}
 		else if (choose == "7")
 		{
@@ -468,6 +480,256 @@ void ChangePrice()
 			}
 		}
 	}
+}
+
+void ChangeStorage()
+{
+	std::string choose;
+	while (true)
+	{
+		system("cls");
+		std::cout << "1 - Добавить новый товар\n";
+		std::cout << "2 - Изменить название товара\n";
+		std::cout << "3 - Удалить товар\n";
+		std::cout << "0 - Выход из редактора\n";
+		std::cout << "Ввод - ";
+		Getline(choose);
+		if (choose == "1")
+		{
+			AddNewItem();
+		}
+		else if (choose == "2")
+		{
+			ChangeName();
+		}
+		else if (choose == "3")
+		{
+			
+		}
+		else if (choose == "0")
+		{
+			system("cls");
+			break;
+		}
+		else
+		{
+			Err();
+		}
+	}
+
+
+}
+
+void AddNewItem()
+{
+	std::string newName, newPrice, newCount, choose;
+	double price = 0.0;
+	unsigned int count = 0;
+	bool exit;
+
+	while (true)
+	{
+		exit = true;
+		while (true)
+		{
+			system("cls");
+			std::cout << "\tДобавление нового товара\nВведите exit для прекращение операции\n\n";
+			std::cout << "Введите название нового товара - ";
+			Getline(newName);
+			if (newName == "exit")
+			{
+				std::cout << "Операция добавления товара прекращена!\n";
+				Sleep(1500);
+				exit = false;
+				break;
+			}
+			if (newName.size() <= 0 || newName.size() >= 60)
+			{
+				std::cout << "Ошибка имени.Максимальная длина 60 символов";
+				Sleep(1500);
+			}
+			else
+			{
+				break;
+			}
+		}
+
+		while (exit)
+		{
+			system("cls");
+			std::cout << "\tДобавление нового товара\nВведите exit для прекращение операции\n\n";
+			std::cout << "Введите кол-во нового товара - ";
+			Getline(newCount);
+			if (newCount == "exit")
+			{
+				std::cout << "Операция добавления товара прекращена!\n";
+				Sleep(1500);
+				exit = false;
+				break;
+			}
+			if (IsNumber(newCount))
+			{
+				count = std::stoi(newCount);
+				if (count > 300 || count < 0)
+				{
+					std::cout << "Ошибка максимального кол-во товаров. Не более 300 ед";
+					Sleep(1500);
+				}
+				else
+				{
+					break;
+				}
+			}
+		}
+
+		while (exit)
+		{
+			system("cls");
+			std::cout << "\tДобавление нового товара\nВведите exit для прекращение операции\n\n";
+			std::cout << "Введите цену нового товара - ";
+			Getline(newPrice);
+			if (newPrice == "exit")
+			{
+				std::cout << "Операция изменения цены товара прекращена!\n";
+				Sleep(1500);
+				exit = false;
+				break;
+			}
+			if (IsNumber(newPrice))
+			{
+				price = std::stod(newPrice);
+				if (price > 200000.99 || price < 0)
+				{
+					std::cout << "Ошибка максимальной цены товаров. Не более 200000.99 руб";
+					Sleep(1500);
+				}
+				else
+				{
+					break;
+				}
+			}
+		}
+
+		while (exit)
+		{
+			system("cls");
+			std::cout << "Новый товар "<< newName<<"\n";
+			std::cout << "Кол-во " << count << "\n";
+			std::cout << "Цена " << newPrice << "\n";
+			std::cout << "Подтвердить?\n1 - Да 2 - Нет\nВвод: ";
+			Getline(choose);
+			if (choose == "1")
+			{
+				storageSize++;
+				unsigned int* idArrTemp = new unsigned int[storageSize];
+				std::string* nameArrTemp = new std::string[storageSize];
+				unsigned int* countArrTemp = new unsigned int[storageSize];
+				double* priceArrTemp = new double[storageSize];
+
+				FillArray(idArrTemp, idArr, storageSize - 1);
+				FillArray(nameArrTemp, nameArr, storageSize - 1);
+				FillArray(countArrTemp, counterArr, storageSize - 1);
+				FillArray(priceArrTemp, priceArr, storageSize - 1);
+
+				idArrTemp[storageSize - 1] = storageSize;
+				nameArrTemp[storageSize - 1] = newName;
+				countArrTemp[storageSize - 1] = count;
+				priceArrTemp[storageSize - 1] = price;
+
+				std::swap(idArr, idArrTemp);
+				std::swap(nameArr, nameArrTemp);
+				std::swap(counterArr,countArrTemp);
+				std::swap(priceArr, priceArrTemp);
+				
+				delete[]idArrTemp,nameArrTemp,countArrTemp,priceArrTemp;
+				std::cout << "Идет подготовка....";
+				Sleep(2000);
+				std::cout << "Товар успешно добавлен\n\n";
+				Sleep(1500);
+				break;
+
+			}
+			else if(choose == "2")
+			{
+				std::cout << "Отмена";
+				Sleep(1500);
+				break;
+			}
+			else
+			{
+				Err();
+			}
+		}
+		if (exit == false)
+		{
+			break;
+		}
+	}
+}
+
+void ChangeName()
+{
+	std::string chooseId, newName, choose;
+	unsigned int id = 0;
+
+	while (true)
+	{
+		system("cls");
+		ShowStorage(3);
+
+		std::cout << "\nВведите id товара или exit для выхода - ";
+		Getline(chooseId);
+		if (chooseId == "exit")
+		{
+			std::cout << "Отмена операции смены названия!\n";
+			Sleep(1500);
+			break;
+		}
+		std::cout << "Введите новое название товара - ";
+		Getline(newName);
+		if (newName.size()<=0||newName.size()>=60)
+		{
+			std::cout << "Ошибка имени.Максимальная длина 60 символов";
+			Sleep(1500);
+		}
+		else if (IsNumber(chooseId))
+		{
+			id = std::stoi(chooseId)-1;
+			if (id<0|| id>storageSize -1)
+			{
+				std::cout << "Ошибка ID!\n";
+				Sleep(1500);
+			}
+			else
+			{
+				std::cout << nameArr[id] << " ----> " << newName << "\n\n";
+				std::cout << "Подвердить? \n1 - да\n2- нет\nВвод ";
+				Getline(choose);
+				if (choose == "1")
+				{
+					nameArr[id] = newName;
+					std::cout << "Смена названия завершена";
+					Sleep(1500);
+					break;
+				}
+				else if (choose == "2")
+				{
+					std::cout << "Отмена операции\n";
+					Sleep(1500);
+				}
+				else
+				{
+					Err();
+				}
+
+			}
+		}
+
+
+	}
+
+
+
 }
 
 inline void Getline(std::string& str)
