@@ -28,6 +28,8 @@ void ChangePrice();
 void ChangeStorage();
 void AddNewItem();
 void ChangeName();
+void DeleteItem();
+
 
 template<typename ArrType>
 void FillArray(ArrType* dynamicArray, ArrType* staticArray, size_t arraySize);
@@ -504,7 +506,7 @@ void ChangeStorage()
 		}
 		else if (choose == "3")
 		{
-			
+			DeleteItem();
 		}
 		else if (choose == "0")
 		{
@@ -728,6 +730,86 @@ void ChangeName()
 
 	}
 
+
+
+}
+
+void DeleteItem()
+{
+	std::string chooseID, choose;
+	unsigned int id = 0;
+	while (true)
+	{
+		system("cls");
+		ShowStorage(3);
+		std::cout << "\nВведите Id товара для удаление или exit для выхода";
+		Getline(chooseID);
+		if (chooseID == "exit")
+		{
+			std::cout << "Отмена операции удаление товара";
+			Sleep(1500);
+			break;
+		}
+
+		if (IsNumber(chooseID))
+		{
+			id = std:: stoi(chooseID) - 1;
+			if (id<0 || id>storageSize - 1)
+			{
+				std::cout << "Ошибка id\n";
+				Sleep(1500);
+			}
+			else
+			{
+				std::cout << "Товар на удаление - " << nameArr[id] << "\n\n";
+				std::cout << "Подтвердить?\n1-да\n2-нет\nВвод - ";
+				if (choose =="1")
+				{
+					storageSize--;
+					unsigned int* idArrTemp = new unsigned int[storageSize];
+					std::string* nameArrTemp = new std::string[storageSize];
+					unsigned int* countArrTemp = new unsigned int[storageSize];
+					double* priceArrTemp = new double[storageSize];
+
+					for (size_t i = 0,c = 0; i < storageSize; i++,c++)
+					{
+						if (id == c)
+						{
+							c++;
+						}
+						idArrTemp[i] = i + 1;
+						nameArrTemp[i] = nameArr[c];
+						countArrTemp[i] = counterArr[c];
+						priceArrTemp[i] = priceArr[c];
+					}
+
+					std::swap(idArr, idArrTemp);
+					std::swap(nameArr, nameArrTemp);
+					std::swap(counterArr, countArrTemp);
+					std::swap(priceArr, priceArrTemp);
+
+					delete[]idArrTemp, nameArrTemp, countArrTemp, priceArrTemp;
+					std::cout << "Идет подготовка....";
+					Sleep(2000);
+					std::cout << "Товар успешно удален\n\n";
+					Sleep(1500);
+					break;
+
+
+				}
+				else if (choose == "2")
+				{
+					std::cout << "Отмена";
+					Sleep(1500);
+				}
+				else
+				{
+					Err();
+				}
+			}
+		}
+
+	}
 
 
 }
