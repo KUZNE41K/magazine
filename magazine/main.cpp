@@ -6,6 +6,7 @@
 
 // ----------------------Учетные записи------------------
 size_t userSize = 2;
+size_t staffCount = 1;//сделать провекри
 std::string userStatus[3]{ "Супер администратор","Администратор","Сотрудник" };
 std::string* loginArr = new std::string[userSize]{ "admin","user" };
 std::string* passArr = new std::string[userSize]{ "admin","user" };
@@ -13,10 +14,13 @@ std::string* statusArr = new std::string[userSize]{ userStatus[0],userStatus[2] 
 std::string currentStatus;
 
 
+
+
 void ChangeUsers();
 void ShowUsers(int mode = 0);
 void AddNewUsers();
 void ChangePass();
+void DeleteUser();
 
 //-------------------------------------------------------
 
@@ -345,6 +349,11 @@ void ChangePass()
 				continue;
 			}
 		}
+		else 
+		{
+			Err();
+			continue;
+		}
 
 		while (true)
 		{
@@ -381,6 +390,31 @@ void ChangePass()
 
 
 	}
+}
+
+void DeleteUser()
+{
+	std::string chooseId, checkPass, choose;
+	int userId, isAdmin = 1;
+
+	while (true)
+	{
+		if (currentStatus == userStatus[0] && userSize < 2)
+		{
+			std::cout << "Нет доступных пользователей для удаления";
+			Sleep(1500);
+			return;
+		}
+		else if (currentStatus == userStatus[1] && staffCount < 1)
+		{
+			std::cout << "Нет доступных пользователей для удаления";
+			Sleep(1500);
+			return;
+		}
+
+		// ----------continue
+	}
+
 }
 
 //------------------------------------------------------------------------
@@ -578,17 +612,17 @@ void SetPassSymbols()
 {
 	for (char i = '!'; i <= '&'; i++)
 	{
-		loginSymbols.insert(i);
+		passSymbols.insert(i);
 	}
 
 	for (char i = '('; i <= '+'; i++)
 	{
-		loginSymbols.insert(i);
+		passSymbols.insert(i);
 	}
 
 	for (char i = '/'; i <= '~'; i++)
 	{
-		loginSymbols.insert(i);
+		passSymbols.insert(i);
 	}
 	isPassSetCreated = true;
 }
