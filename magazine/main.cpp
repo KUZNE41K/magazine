@@ -209,7 +209,7 @@ void AddNewUsers()
 				Sleep(1500);
 				break;
 			}
-			if (CheckLogin(newPass))
+			if (CheckPass(newPass))
 			{
 				break;
 			}
@@ -634,8 +634,8 @@ bool CheckPass(const std::string& str)
 	
 	int numCount = 0;
 	int symCount = 0;
-	std::unordered_set<char> specialSymbols{ '!','@','#','$','%','^','&','*','(',')','-','_','+','=','/','?','|','\\','\"',
-	'\'',',','.','<','>','~','`',';',':','{','}','[',']' };
+	std::unordered_set<char> specialSymbols{'!','@','#','$','%','^','&','*','(',')','-','_','+','=','/','?','|','\\','\"',
+	'\'',',','.','<','>','~','`',';',':','{','}','[',']'};
 
 	for (char sym : str)
 	{
@@ -665,6 +665,7 @@ bool CheckPass(const std::string& str)
 		Sleep(1500);
 		return false;
 	}
+	
 	return true;
 }
 
