@@ -66,6 +66,8 @@ double cash = 6000 + rand() % 7500;
 
 void Selling();
 void CheckArrAppend();
+void PrintCheck(double& totalSum);
+void StorageReturner();
 
 
 
@@ -638,6 +640,8 @@ void Selling()
 	unsigned int id = 0,count = 0;
 	int index = -1;
 	double money = 0.0,totalSum = 0.0;
+	bool isFirst = false;
+	int sleeptimer = 0;
 
 	while (true)
 	{
@@ -647,7 +651,101 @@ void Selling()
 		Getline(chooseId);
 		if (chooseId == "exit")
 		{
+			system("cls");
+			if (isFirst == false)
+			{
+				std::cout << "Выход без покупок\n";
+				Sleep(1500);
+				break;
+			}
+			PrintCheck(totalSum);
+			
+			std::cout << "\nПодтвердить покупку?\n 1 - Да\n2 - Добавить еще товар\n3 - Отмена\nВвод - ";
+			Getline(choose);
+			if (choose == "1")
+			{
+				while (true)
+				{
+					system("cls");
+					std::cout << "Выберите способ оплаты\n1 - Наличными\n2 - Безнал\nВвод - ";
+					Getline(choose);
+					if (choose == "1")
+					{
 
+					}
+					else if (choose == "2")
+					{
+						std::cout << "Приложите карту\n\n";
+						Sleep(1500);
+						sleeptimer = 800;
+						if (rand()%10 <= 2)
+						{
+							for (size_t i = 0; i < 5; i++)
+							{
+								std::cout << i+1<<"\t";
+								Beep(500, 400);
+								Sleep(sleeptimer);
+								sleeptimer -= 100;
+							}
+							std::cout << "\nСоединение не установлено.Повторите попытку\n\n";
+							Sleep(1500);
+						}
+						else
+						{
+							for (size_t i = 0; i < 5; i++)
+							{
+								std::cout << i + 1 << "\t";
+								Beep(500, 400);
+								Sleep(sleeptimer);
+								sleeptimer -= 100;
+							}
+							std::cout << "\nОплата прошла успешно.Спасибо за покупку\n\n";
+							system("pause");
+							bankIncome += totalSum;
+							bonusArr[currentId] += totalSum;
+							system("cls");
+							break;
+						}
+					}
+					else if (choose == "aguzok" || choose == "Aguzok")
+					{
+
+					}
+					else
+					{
+						Err();
+					}
+
+				}
+
+				delete[]idArrCheck;
+				delete[]nameArrCheck;
+				delete[] countArrCheck;
+				delete[] priceArrCheck;
+				delete[] totalPriceArrCheck;
+
+			}
+			else if (choose == "2")
+			{
+				continue;
+			}
+			else if (choose == "3")
+			{
+				std::cout << "Отмена покупки!\n";
+
+
+				Sleep(1500);
+				StorageReturner();
+				system("cls");
+				Sleep(1500);
+
+				return;
+			}
+			else
+			{
+				Err();
+				continue;
+			}
 		}
 		if (IsNumber(chooseId))
 		{
@@ -692,6 +790,10 @@ void Selling()
 		}
 
 		CheckArrAppend();
+		if (isFirst == false)
+		{
+			isFirst = true;
+		}
 		index++;
 		idArrCheck[index] = idArr[id];
 		nameArrCheck[index] = nameArr[id];
@@ -702,6 +804,7 @@ void Selling()
 		totalSum += totalPriceArrCheck[index];
 		
 		std::cout << "\n Товар добавлен в чек\n\n";
+		Sleep(1000);
 
 	}
 
@@ -736,6 +839,36 @@ void CheckArrAppend()
 	delete[] countArrCheckTemp; 
 	delete[] priceArrCheckTemp; 
 	delete[] totalPriceArrCheckTemp;
+
+}
+
+void PrintCheck(double& totalSum)
+{
+	std::cout << "ID\t" << std::left << std::setw(25) << "Название товара \t" <<
+		"Цена за ед\t" << "Цена\n"<<"Итог\n";
+
+	for (size_t i = 0; i < checkSize; i++)
+	{
+		std::cout << i + 1 << "\t" << idArrCheck[i] << "\t" << std::left << std::setw(25) << nameArrCheck[i] <<
+			"\t" << priceArrCheck[i] << "\t" << countArrCheck[i] << "\t" << totalPriceArrCheck[i] << "\n";
+	}
+	std::cout << "Итого к оплате  - " << totalSum << "\n\n";
+
+}
+
+void StorageReturner()
+{
+
+	for (size_t i = 0; i < checkSize; i++)
+	{
+		counterArr[idArrCheck[i] - 1] += countArrCheck[i];
+
+	}
+	delete[]idArrCheck;
+	delete[]nameArrCheck;
+	delete[] countArrCheck;
+	delete[] priceArrCheck;
+	delete[] totalPriceArrCheck;
 
 }
 
