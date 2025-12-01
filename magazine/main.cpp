@@ -37,6 +37,9 @@ bool isStorageCreate = false;
 
 void createStorage();
 void ShowStorage(int mode = 0);
+
+void zeroCreateStorage();
+
 void AddStorageItem();
 void RemoveStorageItem();
 void ChangePrice();
@@ -415,7 +418,7 @@ void ChangePass()
 			{
 				if (newPass1 == newPass2 && newPass1 != passArr[userId] && newPass2 != passArr[userId])
 				{
-					passArr[userId] == newPass1;
+					passArr[userId] = newPass1;
 					std::cout << "Успешно\n";
 					Sleep(1500);
 					break;
@@ -599,6 +602,8 @@ void ShowStorage(int mode)
 			std::cout << idArr[i] << "\t" << std::left << std::setw(25) << nameArr[i] <<
 				"\t" << counterArr[i] << "\t" << priceArr[i] << "\n";
 		}
+		Sleep(3000);
+		system("cls");
 	}
 	else if (mode == 1)
 	{
@@ -630,6 +635,48 @@ void ShowStorage(int mode)
 			std::cout << idArr[i] << "\t" << std::left << std::setw(25) << nameArr[i] << "\t\n";
 		}
 	}
+}
+
+void zeroCreateStorage()
+{
+	std::string choose;
+
+	if (isStorageCreate)
+    {
+        delete[] idArr;
+        delete[] nameArr;
+        delete[] counterArr;
+        delete[] priceArr;
+        isStorageCreate = false;
+    }
+
+	idArr = new unsigned int[storageSize];
+	nameArr = new std::string[storageSize];
+	counterArr = new unsigned int[storageSize];
+	priceArr = new double[storageSize];
+		
+	for (int i = 0; i < storageSize; i++)
+	{
+		idArr[i] = 0;
+		nameArr[i] = "";
+		counterArr[i] = 0;
+		priceArr[i] = 0.0;
+	}
+
+	while (true)
+	{
+		AddNewItem();
+		std::cout << "\nПодтвердите окончание добавление товара в склад exit - ";
+		Getline(choose);
+
+		if (choose == "exit")
+		{
+			break;
+		}
+	}
+
+	isStorageCreate = true;
+
 }
 
 //----------------------------------------------------------
@@ -723,7 +770,7 @@ void Selling()
 				delete[] countArrCheck;
 				delete[] priceArrCheck;
 				delete[] totalPriceArrCheck;
-
+				break;
 			}
 			else if (choose == "2")
 			{
@@ -901,8 +948,10 @@ void Start()
 				{
 					if (isStorageCreate == false)
 					{
-						// пусто но не на долго ДОМАШКА!!!!!
+						zeroCreateStorage();
 					}
+					system("cls");
+					ShowSuperAdminMenu();
 				}
 				else
 				{
