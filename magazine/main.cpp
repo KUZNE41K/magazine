@@ -71,6 +71,11 @@ void Selling();
 void CheckArrAppend();
 void PrintCheck(double& totalSum);
 void StorageReturner();
+//---------------------------Скидки----------------------
+
+
+double discounts(double& totalSum);
+double birthdayDiscount(double& totalSum);
 
 
 
@@ -710,6 +715,15 @@ void Selling()
 				Sleep(1500);
 				break;
 			}
+			if (totalSum>5000)
+			{
+				totalSum = discounts(totalSum);
+				std::cout << "\nСумма со скидкой состовляет - " << totalSum;
+			}
+
+			totalSum = birthdayDiscount(totalSum);
+			system("cls");
+			
 			PrintCheck(totalSum);
 			
 			std::cout << "\nПодтвердить покупку?\n 1 - Да\n2 - Добавить еще товар\n3 - Отмена\nВвод - ";
@@ -718,6 +732,7 @@ void Selling()
 			{
 				while (true)
 				{
+					
 					system("cls");
 					std::cout << "Выберите способ оплаты\n1 - Наличными\n2 - Безнал\nВвод - ";
 					Getline(choose);
@@ -971,6 +986,50 @@ void StorageReturner()
 	priceArrCheck = nullptr;
 	totalPriceArrCheck = nullptr;
 	checkSize = 0;
+}
+
+double discounts(double& totalSum)
+{
+	if (totalSum>5000)
+	{
+		 return totalSum - (totalSum * 0.08);
+	}
+	else if(totalSum > 1500)
+	{
+		return totalSum - (totalSum * 0.15);
+	}
+	else if (totalSum > 25000)
+	{
+		return totalSum - (totalSum * 0.20);
+	}
+	else
+	{
+		return totalSum;
+	}
+
+
+}
+
+double birthdayDiscount(double& totalSum)
+{
+	std::string choose;
+	std::cout << "У вас сегодня День Рождение? \n Ввод 1 - Да или 2 - Нет - ";
+	Getline(choose);
+	if (choose == "2")
+	{
+		std::cout << "К сожелению скидки не будеть в честь дня рождения\n";
+		return totalSum;
+	}
+	else if (choose == "1")
+	{
+
+		std::cout << "\nСкидка в честь дня рождения состовляет - 12%\n";
+		std::cout << "\nСумма со скидкой состовляет - " << totalSum - (totalSum * 0.12)<<"\n";
+		Sleep(2000);
+		return totalSum - (totalSum * 0.12);
+		
+	}
+	return totalSum;
 }
 
 
